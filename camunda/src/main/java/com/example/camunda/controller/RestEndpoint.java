@@ -23,7 +23,7 @@ public class RestEndpoint {
 
 	@GetMapping("/start")
 	public String serviceB() {
-		helloService.sayHello("Hello, Camunda from B");
+		helloService.sayHello("[REST] Starting new process with name: TestProcess");
 
 		ProcessInstance pi = runtimeService.startProcessInstanceByKey("TestProcess");
 		
@@ -34,14 +34,14 @@ public class RestEndpoint {
 
 	@GetMapping("/continue")
 	public String serviceC(@RequestParam String id) {
-		helloService.sayHello("Gonna continue Camunda process with id: " + id);
+		helloService.sayHello("[REST] Gonna continue Camunda process with id: " + id);
 
 		MessageCorrelationResult result = runtimeService.createMessageCorrelation("MessageContinue")
 			.processInstanceId(id)
 			.correlateWithResult();
 		
 		return "Message sent to Camunda with result: " + result.getResultType()
-			+ "<a href='/r1/start'>Start new.</a>";
+			+ "\n<a href='/r1/start'>Start new.</a>";
 	}
 
 }

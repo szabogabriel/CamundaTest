@@ -13,7 +13,7 @@ public class HelloService implements JavaDelegate {
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		sayHello("Called from Camunda!!!!");
+		sayHello("[FirstTask] Camunda process started. Waiting for message.");
 	}
 
 }

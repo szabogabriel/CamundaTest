@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1r906ny" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.3">
+  <bpmn:process id="TestProcess" name="TestProcess" isExecutable="true" camunda:versionTag="test">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1d60atv</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1d60atv" sourceRef="StartEvent_1" targetRef="Activity_026agy8" />
+    <bpmn:endEvent id="Event_0tb1u6r">
+      <bpmn:incoming>Flow_0zcsrmx</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_17bv2n5" sourceRef="Activity_026agy8" targetRef="Gateway_0r32mu7" />
+    <bpmn:serviceTask id="Activity_026agy8" name="Print Hello World" camunda:class="com.example.camunda.service.HelloService">
+      <bpmn:incoming>Flow_1d60atv</bpmn:incoming>
+      <bpmn:outgoing>Flow_17bv2n5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1nsw5l4" sourceRef="Activity_Callback1" targetRef="Gateway_08wf3fa" />
+    <bpmn:receiveTask id="Activity_Callback1" name="Callback Topic 1" messageRef="Message_137wy2g">
+      <bpmn:incoming>Flow_1dd2972</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nsw5l4</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sequenceFlow id="Flow_0zcsrmx" sourceRef="Activity_0ypms1f" targetRef="Event_0tb1u6r" />
+    <bpmn:serviceTask id="Activity_0ypms1f" name="Echo finished" camunda:class="com.example.camunda.service.FinishedService">
+      <bpmn:incoming>Flow_0jaz66y</bpmn:incoming>
+      <bpmn:incoming>Flow_1qt403x</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zcsrmx</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1dd2972" sourceRef="Gateway_0x3pvxz" targetRef="Activity_Callback1" />
+    <bpmn:sequenceFlow id="Flow_0jaz66y" sourceRef="Gateway_08wf3fa" targetRef="Activity_0ypms1f" />
+    <bpmn:parallelGateway id="Gateway_0x3pvxz">
+      <bpmn:incoming>Flow_01uvffk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dd2972</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1fsyiro</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_08wf3fa">
+      <bpmn:incoming>Flow_1nsw5l4</bpmn:incoming>
+      <bpmn:incoming>Flow_1np37s9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jaz66y</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1fsyiro" sourceRef="Gateway_0x3pvxz" targetRef="Activity_Callback2" />
+    <bpmn:sequenceFlow id="Flow_1np37s9" sourceRef="Activity_Callback2" targetRef="Gateway_08wf3fa" />
+    <bpmn:sequenceFlow id="Flow_01uvffk" name="DoNotSkipWait" sourceRef="Gateway_0r32mu7" targetRef="Gateway_0x3pvxz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!skipWait}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1qt403x" name="SkipWait" sourceRef="Gateway_0r32mu7" targetRef="Activity_0ypms1f">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${skipWait}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:receiveTask id="Activity_Callback2" name="Callback Topic 2" messageRef="Message_0jpcncg">
+      <bpmn:incoming>Flow_1fsyiro</bpmn:incoming>
+      <bpmn:outgoing>Flow_1np37s9</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:exclusiveGateway id="Gateway_0r32mu7" name="DoWait">
+      <bpmn:incoming>Flow_17bv2n5</bpmn:incoming>
+      <bpmn:outgoing>Flow_01uvffk</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1qt403x</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+  </bpmn:process>
+  <bpmn:message id="Message_137wy2g" name="MessageContinueA" />
+  <bpmn:message id="Message_0jpcncg" name="MessageContinueB" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TestProcess">
+      <bpmndi:BPMNEdge id="Flow_0zcsrmx_di" bpmnElement="Flow_0zcsrmx">
+        <di:waypoint x="870" y="223" />
+        <di:waypoint x="1022" y="223" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nsw5l4_di" bpmnElement="Flow_1nsw5l4">
+        <di:waypoint x="680" y="120" />
+        <di:waypoint x="710" y="120" />
+        <di:waypoint x="710" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17bv2n5_di" bpmnElement="Flow_17bv2n5">
+        <di:waypoint x="310" y="220" />
+        <di:waypoint x="365" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d60atv_di" bpmnElement="Flow_1d60atv">
+        <di:waypoint x="158" y="223" />
+        <di:waypoint x="210" y="223" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dd2972_di" bpmnElement="Flow_1dd2972">
+        <di:waypoint x="520" y="195" />
+        <di:waypoint x="520" y="120" />
+        <di:waypoint x="580" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jaz66y_di" bpmnElement="Flow_0jaz66y">
+        <di:waypoint x="735" y="220" />
+        <di:waypoint x="770" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fsyiro_di" bpmnElement="Flow_1fsyiro">
+        <di:waypoint x="520" y="245" />
+        <di:waypoint x="520" y="350" />
+        <di:waypoint x="580" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1np37s9_di" bpmnElement="Flow_1np37s9">
+        <di:waypoint x="680" y="350" />
+        <di:waypoint x="710" y="350" />
+        <di:waypoint x="710" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01uvffk_di" bpmnElement="Flow_01uvffk">
+        <di:waypoint x="415" y="220" />
+        <di:waypoint x="495" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="418" y="202" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qt403x_di" bpmnElement="Flow_1qt403x">
+        <di:waypoint x="390" y="245" />
+        <di:waypoint x="390" y="480" />
+        <di:waypoint x="820" y="480" />
+        <di:waypoint x="820" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="584" y="462" width="43" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0sh2yvv_di" bpmnElement="Activity_Callback1">
+        <dc:Bounds x="580" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wu6o2q_di" bpmnElement="Activity_0ypms1f">
+        <dc:Bounds x="770" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0tb1u6r_di" bpmnElement="Event_0tb1u6r">
+        <dc:Bounds x="1022" y="205" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_12bwlwb_di" bpmnElement="Gateway_0x3pvxz">
+        <dc:Bounds x="495" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1k0y9wb_di" bpmnElement="Gateway_08wf3fa">
+        <dc:Bounds x="685" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="122" y="205" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09ssohe_di" bpmnElement="Activity_026agy8">
+        <dc:Bounds x="210" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vfc480_di" bpmnElement="Activity_Callback2">
+        <dc:Bounds x="580" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0dbso04_di" bpmnElement="Gateway_0r32mu7" isMarkerVisible="true">
+        <dc:Bounds x="365" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="373" y="165" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

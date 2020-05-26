@@ -38,7 +38,7 @@ public class CamundaConfiguration {
     SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
 
     config.setDataSource(dataSource);
-    config.setDatabaseSchemaUpdate("false");
+    config.setDatabaseSchemaUpdate("true");
 
     config.setTransactionManager(transactionManager());
 

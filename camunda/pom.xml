@@ -57,6 +57,12 @@
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 			<version>3.4.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -77,6 +83,41 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.github.kongchen</groupId>
+				<artifactId>swagger-maven-plugin</artifactId>
+				<version>3.1.7</version>
+				<configuration>
+					<apiSources>
+						<apiSource>
+							<springmvc>true</springmvc>
+							<locations>com.example.camunda.controller</locations>
+							<schemes>http,https</schemes>
+							<host>localhost:8080</host>
+							<basePath>/</basePath>
+							<info>
+								<title>Camunda test API</title>
+								<version>v1</version>
+								<description>A simple test application for Camunda.</description>
+							</info>
+							<!-- Support classpath or file absolute path here. 1) classpath e.g: 
+								"classpath:/markdown.hbs", "classpath:/templates/hello.html" 2) file e.g: 
+								"${basedir}/src/main/resources/markdown.hbs", "${basedir}/src/main/resources/template/hello.html" -->
+							<templatePath>${basedir}/src/main/resources/templates/strapdown.html.hbs</templatePath>
+							<outputPath>${basedir}/generated/document.html</outputPath>
+							<swaggerDirectory>generated/swagger-ui</swaggerDirectory>
+						</apiSource>
+					</apiSources>
+				</configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,0 +1,69 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "A simple test application for Camunda.",
+    "version" : "v1",
+    "title" : "Camunda test API"
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/basePath",
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/r1/continue" : {
+      "get" : {
+        "operationId" : "serviceC",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "message",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/r1/index" : {
+      "get" : {
+        "operationId" : "index",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/r1/start" : {
+      "get" : {
+        "operationId" : "start",
+        "parameters" : [ {
+          "name" : "skipWait",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

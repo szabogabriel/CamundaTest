@@ -11,13 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.camunda.service.HelloService;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
 
-@Api(value="/r1")
 @RestController
 @RequestMapping("/r1")
 public class RestEndpoint {
@@ -28,9 +22,6 @@ public class RestEndpoint {
   @Autowired
   private RuntimeService runtimeService;
 
-  @ApiOperation(value = "This is the operation index.", response = String.class, notes="These are the notes...")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Request received."),
-    @ApiResponse(code = 404, message = "Fehler.")})
   @GetMapping("/index")
   public String index() {
     helloService.sayHello("[REST] Initiating the Camunda process. Decide what to do!");
@@ -38,11 +29,8 @@ public class RestEndpoint {
     return "<a href='/r1/start?skipWait=true'>Skip wait</a><br/><a href='/r1/start?skipWait=false'>Wait</a>";
   }
 
-  @ApiOperation(value = "This is the operation index.", response = String.class, notes="These are the notes...")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Request received."),
-      @ApiResponse(code = 404, message = "Fehler.")})
   @GetMapping("/start")
-  public String start(@ApiParam(value = "Value whether to skip the wait step.", required = true) @RequestParam String skipWait) {
+  public String start(@RequestParam String skipWait) {
     helloService.sayHello("[REST] Starting new process with name: TestProcess");
 
     Boolean gonnaSkipWait = "TRUE".equalsIgnoreCase(skipWait);
@@ -64,11 +52,8 @@ public class RestEndpoint {
     }
   }
 
-  @ApiOperation(value = "This is the operation index.", response = String.class, notes="These are the notes...")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Request received."),
-      @ApiResponse(code = 404, message = "Fehler.")})
   @GetMapping("/continue")
-  public String serviceC(@ApiParam(value = "ID of the process to be progressed.", required = true)@RequestParam String id, @ApiParam(value = "The message to be sent.", required = true)@RequestParam String message) {
+  public String serviceC(@RequestParam String id, @RequestParam String message) {
     helloService.sayHello("[REST] Gonna continue Camunda process with id: " + id);
 
     MessageCorrelationResult result = runtimeService.createMessageCorrelation(message)
